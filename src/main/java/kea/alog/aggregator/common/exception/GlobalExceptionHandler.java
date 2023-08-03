@@ -1,10 +1,10 @@
 package kea.alog.aggregator.common.exception;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import kea.alog.aggregator.common.dto.ResponseDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
