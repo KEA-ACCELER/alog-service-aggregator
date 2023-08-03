@@ -1,8 +1,10 @@
 package kea.alog.aggregator.common.exception;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import kea.alog.aggregator.common.dto.ResponseDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,14 +12,29 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(FeignException.class)
-    public Object handleFeignException(FeignException e){
+    protected ResponseEntity<ResponseDto> handleFeignException(FeignException e){
         ObjectMapper objectMapper = new ObjectMapper();
         try{
-            Object errBody = objectMapper.readTree(e.contentUTF8());
-            return ResponseEntity.status(e.status()).body(errBody);
+            JsonNode errBody = objectMapper.readTree(e.contentUTF8());
+            int code = errBody.get("code").asInt();
+            String message = errBody.get("message").asText();
+            return ResponseEntity.status(code).body(
+                ResponseDto.fail(code, message)
+            );
         }
         catch (Exception ex) {
-            return ResponseEntity.status(500).body(ResponseDto.builder().code(500).message("INTERNAL_SERVER_ERR").build());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ResponseDto.fail(500, "INTERNAL_SERVER_ERR")
+            );
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ResponseDto> handleException(
+        Exception e
+    ) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+            ResponseDto.fail(500, "INTERNAL_SERVER_ERR")
+        );
     }
 }

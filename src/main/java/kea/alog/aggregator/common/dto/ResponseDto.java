@@ -3,8 +3,10 @@ package kea.alog.aggregator.common.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class ResponseDto<T> {
     private final int code;
 
