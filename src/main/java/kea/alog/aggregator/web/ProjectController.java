@@ -27,6 +27,7 @@ public class ProjectController {
         @ApiResponse(responseCode = "200", description = "성공"),
         @ApiResponse(responseCode = "404", description = "존재하지 않는 프로젝트 pk", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
+
     @GetMapping("{projectPk}")
     public ResponseDto<ProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk){
         return ResponseDto.success(200, projectService.findByPk(projectPk));
