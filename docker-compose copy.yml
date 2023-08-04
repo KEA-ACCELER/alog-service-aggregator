@@ -3,11 +3,11 @@ services:
   web:
     build: ./
     environment:
-      - JWT_SECRET=
+
       - USER_SERVICE_URL=
       - FILE_SERVICE_URL
       - PROJECT_SERVICE_URL
       - ISSUE_SERVICE_URL=
       - RELEASE_NOTE_SERVICE_URL=
     ports:
-      - "30000:8080"
+      - "8082:8082"
