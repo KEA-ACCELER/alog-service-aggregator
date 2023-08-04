@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface ProjectFeign {
     @GetMapping("{projectPk}")
-    public ResponseDto<FeignProjectResponseDto> FindByPk(@PathVariable("projectPk") Long projectPk);
+    public ResponseDto<FeignProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk);
 }

@@ -23,7 +23,7 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public ProjectResponseDto findByPk(Long projectPk) {
-        ResponseDto<FeignProjectResponseDto> response = projectFeign.FindByPk(projectPk);
+        ResponseDto<FeignProjectResponseDto> response = projectFeign.findByPk(projectPk);
         FeignProjectResponseDto project = response.getData();
 
         UserResponseDto pm = userFeign.findUserByPk(project.getPmPk());
