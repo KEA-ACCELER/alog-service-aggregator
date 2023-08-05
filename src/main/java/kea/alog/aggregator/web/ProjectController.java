@@ -30,12 +30,16 @@ public class ProjectController {
         @ApiResponse(responseCode = "200", description = "성공"),
         @ApiResponse(responseCode = "404", description = "존재하지 않는 프로젝트 pk", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
-    
     @GetMapping("{projectPk}")
     public ResponseDto<ProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk){
         return ResponseDto.success(200, projectService.findByPk(projectPk));
     }
 
+    @Operation(summary = "프로젝트 전체 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공"),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 입력 값", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+    })
     @GetMapping()
     public ResponseDto<PageDto<ProjectResponseDto>> findAll(@RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
