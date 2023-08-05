@@ -6,13 +6,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
 import kea.alog.aggregator.service.project.ProjectService;
+import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,5 +34,12 @@ public class ProjectController {
     @GetMapping("{projectPk}")
     public ResponseDto<ProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk){
         return ResponseDto.success(200, projectService.findByPk(projectPk));
+    }
+
+    @GetMapping()
+    public ResponseDto<PageDto<ProjectResponseDto>> findAll(@RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
+        @RequestParam("size") int size){
+        return ResponseDto.success(200, projectService.findAll(keyword, sortType, page, size));
     }
 }
