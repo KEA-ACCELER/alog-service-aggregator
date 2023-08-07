@@ -11,6 +11,7 @@ import kea.alog.aggregator.common.dto.ResponseDto;
 import kea.alog.aggregator.service.project.ProjectService;
 import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
+import kea.alog.aggregator.web.dto.ProjectMemberDto.ProjectMemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,5 +46,11 @@ public class ProjectController {
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
         @RequestParam("size") int size){
         return ResponseDto.success(200, projectService.findAll(keyword, sortType, page, size));
+    }
+
+    @GetMapping("{projectPk}/members")
+    public ResponseDto<PageDto<ProjectMemberResponseDto>> findMembers(@PathVariable("projectPk") Long projectPk, @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam("page") int page, @RequestParam("size") int size) {
+        return ResponseDto.success(200, projectService.findMembers(projectPk, keyword, page, size));
     }
 }
