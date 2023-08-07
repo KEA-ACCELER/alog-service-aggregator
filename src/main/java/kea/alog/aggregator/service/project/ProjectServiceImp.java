@@ -1,10 +1,12 @@
 package kea.alog.aggregator.service.project;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
 import kea.alog.aggregator.service.openfeign.ProjectFeign;
 import kea.alog.aggregator.service.openfeign.UserFeign;
+import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.FeignProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
 import kea.alog.aggregator.web.dto.TeamDto.TeamResponseDto;
@@ -23,17 +25,42 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public ProjectResponseDto findByPk(Long projectPk) {
-        ResponseDto<FeignProjectResponseDto> response = projectFeign.FindByPk(projectPk);
-        FeignProjectResponseDto project = response.getData();
+        ResponseDto<FeignProjectResponseDto> response = projectFeign.findByPk(projectPk);
 
-        UserResponseDto pm = userFeign.findUserByPk(project.getPmPk());
+        return convertToProjectResponse(response.getData());
+    }
 
-        List<UserResponseDto> projectMembers = new ArrayList<>();
-        for (Long userPk: project.getProjectMembers()){
-            projectMembers.add(userFeign.findUserByPk(userPk));
-        }
+    @Override
+    public PageDto<ProjectResponseDto> findAll(String keyword, ProjectSortType sortType, int page,
+        int size) {
+        ResponseDto<PageDto<FeignProjectResponseDto>> response = projectFeign.findAll(keyword, sortType, page, size);
+        List<FeignProjectResponseDto> projects = response.getData().getContent();
 
-        TeamResponseDto team = userFeign.findTeamByPk(projectPk, project.getTeamPk());
+        return PageDto.<ProjectResponseDto>builder()
+                      .content(projects.stream().map(this::convertToProjectResponse).collect(
+                          Collectors.toList()))
+                      .totalPages(response.getData().getTotalPages())
+                      .totalElements(response.getData().getTotalElements())
+                      .pageNumber(response.getData().getPageNumber())
+                      .pageSize(response.getData().getPageSize())
+                      .build();
+    }
+
+    private UserResponseDto findUser(Long pmPk){
+        return userFeign.findUserByPk(pmPk);
+    }
+
+    private TeamResponseDto findTeam(Long projectPk, Long teamPk) {
+        return userFeign.findTeamByPk(projectPk, teamPk);
+    }
+
+    private ProjectResponseDto convertToProjectResponse(FeignProjectResponseDto project) {
+        Long projectPk = project.getPk();
+        UserResponseDto pm = findUser(project.getPmPk());
+
+        List<UserResponseDto> projectMembers = project.getProjectMembers().stream().map(this::findUser).collect(
+            Collectors.toList());
+        TeamResponseDto team = findTeam(projectPk, project.getTeamPk());
 
         return ProjectResponseDto.builder().pk(projectPk).name(project.getName())
                                  .description(project.getDescription()).team(team).pm(pm)
