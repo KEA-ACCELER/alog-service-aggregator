@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface ProjectFeign {
     @GetMapping("{projectPk}")
-    public ResponseDto<FeignProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk);
+    ResponseDto<FeignProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk);
 
     @GetMapping()
-    public ResponseDto<PageDto<FeignProjectResponseDto>> findAll(@RequestParam(value = "keyword", required = false) String keyword,
+    ResponseDto<PageDto<FeignProjectResponseDto>> findAll(@RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
         @RequestParam("size") int size);
+
+    @GetMapping("{projectPk}/members")
+    ResponseDto<PageDto<Long>> findMembers(@PathVariable("projectPk") Long projectPk, @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam("page") int page, @RequestParam("size") int size);
 }
