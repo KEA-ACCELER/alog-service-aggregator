@@ -26,6 +26,13 @@ public class TopicController {
 
     private final TopicService topicService;
 
+    @Operation(summary = "토픽 전체 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공"),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 request", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+        @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping()
     public ResponseDto<PageDto<TopicResponseDto>> findAll(@PathVariable("projectPk") Long projectPk,
         @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") TopicSortType sortType, @RequestParam("page") int page,
