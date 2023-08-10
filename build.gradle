@@ -37,6 +37,8 @@ dependencies {
 	//Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	implementation 'org.springframework.security:spring-security-oauth2-client:6.1.2'
+
 
 }
 
