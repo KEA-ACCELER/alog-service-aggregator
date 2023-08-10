@@ -17,6 +17,7 @@ public interface UserFeign {
     @GetMapping(path="info/{userPk}")
     UserResponseDto findUserByPk(@PathVariable("userPk") Long userPk);
 
+    // TODO: user service에 jwt 도입 시 변경될 부분
     @GetMapping(path="teams")
     TeamResponseDto findTeamByPk(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk);
 }
