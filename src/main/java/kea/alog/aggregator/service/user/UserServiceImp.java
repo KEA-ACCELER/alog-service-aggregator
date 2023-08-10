@@ -11,7 +11,7 @@ public class UserServiceImp implements UserService{
 
    private final UserFeign userFeign;
 
-    public UserResponseDto findUserByPk(Long userPk){
+    public UserResponseDto findByPk(Long userPk){
         return userFeign.findUserByPk(userPk);
     }
 }
