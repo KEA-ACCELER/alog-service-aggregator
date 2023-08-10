@@ -1,8 +1,8 @@
 package kea.alog.aggregator.service.project;
 
 import kea.alog.aggregator.common.dto.ResponseDto;
-import kea.alog.aggregator.service.openfeign.ProjectFeign;
 import kea.alog.aggregator.service.openfeign.UserFeign;
+import kea.alog.aggregator.service.openfeign.project.TopicFeign;
 import kea.alog.aggregator.web.dto.TopicDto.FeignTopicResponseDto;
 import kea.alog.aggregator.web.dto.TopicDto.TopicResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TopicServiceImpl implements TopicService{
 
-    private final ProjectFeign projectFeign;
+    private final TopicFeign topicFeign;
     private final UserFeign userFeign;
 
     @Override
     public TopicResponseDto findTopic(Long projectPk, Long topicPk) {
-        ResponseDto<FeignTopicResponseDto> response = projectFeign.findTopic(projectPk, topicPk);
+        ResponseDto<FeignTopicResponseDto> response = topicFeign.findTopic(projectPk, topicPk);
         FeignTopicResponseDto topic = response.getData();
 
         return TopicResponseDto.builder().pk(topic.getPk()).projectPk(topic.getProjectPk())
