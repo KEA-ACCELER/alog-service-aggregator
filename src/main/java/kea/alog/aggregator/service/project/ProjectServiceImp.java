@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
 import kea.alog.aggregator.service.mapper.ProjectMemberMapper;
-import kea.alog.aggregator.service.openfeign.ProjectFeign;
+import kea.alog.aggregator.service.openfeign.project.ProjectFeign;
 import kea.alog.aggregator.service.openfeign.UserFeign;
 import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.FeignProjectResponseDto;
