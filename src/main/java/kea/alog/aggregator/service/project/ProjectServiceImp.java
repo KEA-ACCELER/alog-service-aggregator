@@ -8,7 +8,9 @@ import kea.alog.aggregator.service.mapper.ProjectMemberMapper;
 import kea.alog.aggregator.service.openfeign.project.ProjectFeign;
 import kea.alog.aggregator.service.openfeign.UserFeign;
 import kea.alog.aggregator.web.constant.ProjectSortType;
+import kea.alog.aggregator.web.dto.ProjectDto.FeignMyProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.FeignProjectResponseDto;
+import kea.alog.aggregator.web.dto.ProjectDto.MyProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectMemberDto.ProjectMemberResponseDto;
 import kea.alog.aggregator.web.dto.TeamDto.TeamResponseDto;
@@ -65,6 +67,21 @@ public class ProjectServiceImp implements ProjectService {
                       .build();
     }
 
+    @Override
+    public PageDto<MyProjectResponseDto> findMine(String keyword, ProjectSortType sortType,
+        int page, int size) {
+        ResponseDto<PageDto<FeignMyProjectResponseDto>> response = projectFeign.findMine(keyword, sortType, page, size);
+        List<FeignMyProjectResponseDto> projects = response.getData().getContent();
+
+        return PageDto.<MyProjectResponseDto>builder().content(projects.stream().map(this::convertToMyProjectResponseDto).collect(
+            Collectors.toList()))
+            .totalPages(response.getData().getTotalPages())
+            .totalElements(response.getData().getTotalElements())
+            .pageNumber(response.getData().getPageNumber())
+            .pageSize(response.getData().getPageSize())
+            .build();
+    }
+
     private UserResponseDto findUser(Long pmPk){
         return userFeign.findUserByPk(pmPk);
     }
@@ -85,5 +102,15 @@ public class ProjectServiceImp implements ProjectService {
                                  .description(project.getDescription()).team(team).pm(pm)
                                  .topics(project.getTopics()).projectMembers(projectMembers)
                                  .createdAt(project.getCreatedAt()).build();
+    }
+
+    private MyProjectResponseDto convertToMyProjectResponseDto(FeignMyProjectResponseDto project) {
+        Long projectPk = project.getPk();
+        UserResponseDto pm = findUser(project.getPmPk());
+        TeamResponseDto team = findTeam(projectPk, project.getTeamPk());
+
+        return MyProjectResponseDto.builder().pk(projectPk).name(project.getName())
+            .description(project.getDescription()).team(team).pm(pm)
+            .createdAt(project.getCreatedAt()).build();
     }
 }

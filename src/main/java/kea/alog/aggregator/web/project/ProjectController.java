@@ -10,6 +10,7 @@ import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
 import kea.alog.aggregator.service.project.ProjectService;
 import kea.alog.aggregator.web.constant.ProjectSortType;
+import kea.alog.aggregator.web.dto.ProjectDto.MyProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectMemberDto.ProjectMemberResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +61,18 @@ public class ProjectController {
     public ResponseDto<PageDto<ProjectMemberResponseDto>> findMembers(@PathVariable("projectPk") Long projectPk, @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseDto.success(200, projectService.findMembers(projectPk, keyword, page, size));
+    }
+
+    @Operation(summary = "내가 속한 프로젝트 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공"),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 입력 값", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+        @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("mine")
+    public ResponseDto<PageDto<MyProjectResponseDto>> findMine(@RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
+        @RequestParam("size") int size) {
+        return ResponseDto.success(200, projectService.findMine(keyword, sortType, page, size));
     }
 }
