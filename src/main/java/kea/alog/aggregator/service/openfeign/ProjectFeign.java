@@ -2,6 +2,7 @@ package kea.alog.aggregator.service.openfeign;
 
 import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
+import kea.alog.aggregator.config.JwtRequestFeignConfiguration;
 import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.FeignProjectResponseDto;
 import kea.alog.aggregator.web.dto.TopicDto.FeignTopicResponseDto;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
     name = "project-service",
-    url = "${project.service.url}"
+    url = "${project.service.url}",
+    configuration = JwtRequestFeignConfiguration.class
 )
 public interface ProjectFeign {
     @GetMapping("{projectPk}")
