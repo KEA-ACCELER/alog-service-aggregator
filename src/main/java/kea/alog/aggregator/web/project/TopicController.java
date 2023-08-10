@@ -31,6 +31,6 @@ public class TopicController {
     })
     @GetMapping("{topicPk}")
     public ResponseDto<TopicResponseDto> findTopic(@PathVariable("projectPk") Long projectPk, @PathVariable("topicPk") Long topicPk) {
-        return ResponseDto.success(200, topicService.findTopic(projectPk, topicPk));
+        return ResponseDto.success(200, topicService.findByPk(projectPk, topicPk));
     }
 }

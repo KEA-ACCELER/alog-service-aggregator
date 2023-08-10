@@ -16,8 +16,8 @@ public class TopicServiceImpl implements TopicService{
     private final UserFeign userFeign;
 
     @Override
-    public TopicResponseDto findTopic(Long projectPk, Long topicPk) {
-        ResponseDto<FeignTopicResponseDto> response = topicFeign.findTopic(projectPk, topicPk);
+    public TopicResponseDto findByPk(Long projectPk, Long topicPk) {
+        ResponseDto<FeignTopicResponseDto> response = topicFeign.findByPk(projectPk, topicPk);
         FeignTopicResponseDto topic = response.getData();
 
         return TopicResponseDto.builder().pk(topic.getPk()).projectPk(topic.getProjectPk())

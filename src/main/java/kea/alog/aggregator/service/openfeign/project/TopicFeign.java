@@ -14,5 +14,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface TopicFeign {
     @GetMapping("{projectPk}/topics/{topicPk}")
-    ResponseDto<FeignTopicResponseDto> findTopic(@PathVariable("projectPk") Long projectPk, @PathVariable("topicPk") Long topicPk);
+    ResponseDto<FeignTopicResponseDto> findByPk(@PathVariable("projectPk") Long projectPk, @PathVariable("topicPk") Long topicPk);
 }
