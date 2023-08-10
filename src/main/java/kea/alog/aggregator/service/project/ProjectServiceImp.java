@@ -29,20 +29,20 @@ public class ProjectServiceImp implements ProjectService {
     private final ProjectMemberMapper projectMemberMapper;
 
     @Override
-    public ProjectResponseDto findByPk(Long projectPk) {
+    public ProjectResponseDto findByPk(Long projectPk, Long userPk) {
         ResponseDto<FeignProjectResponseDto> response = projectFeign.findByPk(projectPk);
 
-        return convertToProjectResponse(response.getData());
+        return convertToProjectResponse(response.getData(), userPk);
     }
 
     @Override
     public PageDto<ProjectResponseDto> findAll(String keyword, ProjectSortType sortType, int page,
-        int size) {
+        int size, Long userPk) {
         ResponseDto<PageDto<FeignProjectResponseDto>> response = projectFeign.findAll(keyword, sortType, page, size);
         List<FeignProjectResponseDto> projects = response.getData().getContent();
 
         return PageDto.<ProjectResponseDto>builder()
-                      .content(projects.stream().map(this::convertToProjectResponse).collect(
+                      .content(projects.stream().map(project -> convertToProjectResponse(project, userPk)).collect(
                           Collectors.toList()))
                       .totalPages(response.getData().getTotalPages())
                       .totalElements(response.getData().getTotalElements())
@@ -68,12 +68,12 @@ public class ProjectServiceImp implements ProjectService {
     }
 
     @Override
-    public PageDto<MyProjectResponseDto> findMine(String keyword, ProjectSortType sortType,
+    public PageDto<MyProjectResponseDto> findMine(Long userPk, String keyword, ProjectSortType sortType,
         int page, int size) {
         ResponseDto<PageDto<FeignMyProjectResponseDto>> response = projectFeign.findMine(keyword, sortType, page, size);
         List<FeignMyProjectResponseDto> projects = response.getData().getContent();
 
-        return PageDto.<MyProjectResponseDto>builder().content(projects.stream().map(this::convertToMyProjectResponseDto).collect(
+        return PageDto.<MyProjectResponseDto>builder().content(projects.stream().map(project -> convertToMyProjectResponseDto(project, userPk)).collect(
             Collectors.toList()))
             .totalPages(response.getData().getTotalPages())
             .totalElements(response.getData().getTotalElements())
@@ -86,17 +86,17 @@ public class ProjectServiceImp implements ProjectService {
         return userFeign.findUserByPk(pmPk);
     }
 
-    private TeamResponseDto findTeam(Long projectPk, Long teamPk) {
-        return userFeign.findTeamByPk(projectPk, teamPk);
+    private TeamResponseDto findTeam(Long teamPk, Long userPk) {
+        return userFeign.findTeamByPk(teamPk, userPk);
     }
 
-    private ProjectResponseDto convertToProjectResponse(FeignProjectResponseDto project) {
+    private ProjectResponseDto convertToProjectResponse(FeignProjectResponseDto project, Long userPk) {
         Long projectPk = project.getPk();
         UserResponseDto pm = findUser(project.getPmPk());
 
         List<UserResponseDto> projectMembers = project.getProjectMembers().stream().map(this::findUser).collect(
             Collectors.toList());
-        TeamResponseDto team = findTeam(projectPk, project.getTeamPk());
+        TeamResponseDto team = findTeam(project.getTeamPk(), userPk);
 
         return ProjectResponseDto.builder().pk(projectPk).name(project.getName())
                                  .description(project.getDescription()).team(team).pm(pm)
@@ -104,10 +104,10 @@ public class ProjectServiceImp implements ProjectService {
                                  .createdAt(project.getCreatedAt()).build();
     }
 
-    private MyProjectResponseDto convertToMyProjectResponseDto(FeignMyProjectResponseDto project) {
+    private MyProjectResponseDto convertToMyProjectResponseDto(FeignMyProjectResponseDto project, Long userPk) {
         Long projectPk = project.getPk();
         UserResponseDto pm = findUser(project.getPmPk());
-        TeamResponseDto team = findTeam(projectPk, project.getTeamPk());
+        TeamResponseDto team = findTeam(project.getTeamPk(), userPk);
 
         return MyProjectResponseDto.builder().pk(projectPk).name(project.getName())
             .description(project.getDescription()).team(team).pm(pm)

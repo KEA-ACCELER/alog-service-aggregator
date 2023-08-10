@@ -7,11 +7,11 @@ import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectMemberDto.ProjectMemberResponseDto;
 
 public interface ProjectService {
-    ProjectResponseDto findByPk(Long projectPk);
+    ProjectResponseDto findByPk(Long projectPk, Long userPk);
 
-    PageDto<ProjectResponseDto> findAll(String keyword, ProjectSortType sortType, int page, int size);
+    PageDto<ProjectResponseDto> findAll(String keyword, ProjectSortType sortType, int page, int size, Long userPk);
 
     PageDto<ProjectMemberResponseDto> findMembers(Long projectPk, String keyword, int page, int size);
 
-    PageDto<MyProjectResponseDto> findMine(String keyword, ProjectSortType sortType, int page, int size);
+    PageDto<MyProjectResponseDto> findMine(Long userPk, String keyword, ProjectSortType sortType, int page, int size);
 }
