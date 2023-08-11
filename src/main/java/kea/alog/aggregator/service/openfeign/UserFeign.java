@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface UserFeign {
     
-    @GetMapping(path="info/{userPk}")
+    @GetMapping(path="api/users/info/{userPk}")
     UserResponseDto findUserByPk(@PathVariable("userPk") Long userPk);
 
     // TODO: user service에 jwt 도입 시 변경될 부분
-    @GetMapping(path="teams")
+    @GetMapping(path="api/users/teams")
     TeamResponseDto findTeamByPk(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk);
 }
