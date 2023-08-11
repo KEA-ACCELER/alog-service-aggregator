@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam;
     configuration = JwtRequestFeignConfiguration.class
 )
 public interface ProjectFeign {
-    @GetMapping("{projectPk}")
+    @GetMapping("api/projects/{projectPk}")
     ResponseDto<FeignProjectResponseDto> findByPk(@PathVariable("projectPk") Long projectPk);
 
-    @GetMapping()
+    @GetMapping("api/projects")
     ResponseDto<PageDto<FeignProjectResponseDto>> findAll(@RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
         @RequestParam("size") int size);
 
-    @GetMapping("{projectPk}/members")
+    @GetMapping("api/projects/{projectPk}/members")
     ResponseDto<PageDto<Long>> findMembers(@PathVariable("projectPk") Long projectPk, @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("page") int page, @RequestParam("size") int size);
 
-    @GetMapping("mine")
+    @GetMapping("api/projects/mine")
     ResponseDto<PageDto<FeignMyProjectResponseDto>> findMine(@RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
         @RequestParam("size") int size);
