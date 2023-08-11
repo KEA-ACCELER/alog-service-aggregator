@@ -5,6 +5,7 @@ import kea.alog.aggregator.web.dto.UserDto.UserResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -14,10 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface UserFeign {
     
-    @GetMapping(path="info/{userPk}")
+    @GetMapping(path="/api/users/info/{userPk}")
     UserResponseDto findUserByPk(@PathVariable("userPk") Long userPk);
 
     // TODO: user service에 jwt 도입 시 변경될 부분
-    @GetMapping(path="teams")
+    @GetMapping(path="/api/users/teams")
     TeamResponseDto findTeamByPk(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk);
+
+    @PostMapping(path="/api/users/image")
+    String uploadImage(@RequestParam("userPk") Long userPk, @RequestParam("image") String image );
+
+    @PostMapping(path="/api/users/teams/image")
+    String uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("teamImage") String image );
+
 }

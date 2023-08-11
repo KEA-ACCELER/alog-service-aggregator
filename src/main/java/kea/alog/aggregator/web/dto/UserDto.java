@@ -20,11 +20,15 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserResponseDto {
         private Long userPk;
         private String email;
         private String userNN;
-        // TODO: user service에 profile 추가 예정
-        // private String profile;
+        private String profile;
     }
+
+  
+
+    
 }
