@@ -26,6 +26,6 @@ public interface UserFeign {
     String uploadImage(@RequestParam("userPk") Long userPk, @RequestParam("image") String image );
 
     @PostMapping(path="/api/users/teams/image")
-    String uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("teamImage") String image );
+    String uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("imgs") String image );
 
 }
