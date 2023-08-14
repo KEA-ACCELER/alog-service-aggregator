@@ -26,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @Operation(summary = "유저 프로필 이미지 저장")
-    @PostMapping(value = "/profile/image")
+    @PostMapping(value = "/profile/image", consumes = "multipart/form-data")
     public ResponseEntity<String> saveUserImg(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
             @RequestPart(value = "userPk") Long userPk) throws IOException {
@@ -36,7 +36,8 @@ public class UserController {
             }
 
     @Operation(summary = "팀 프로필 이미지 저장")
-    @PostMapping(value = "/teams/image")
+    @PostMapping(value = "/teams/image", consumes = "multipart/form-data")
+
     public ResponseEntity<String> saveTeamImg(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
             @RequestPart(value = "teamPk") Long teamPk,
