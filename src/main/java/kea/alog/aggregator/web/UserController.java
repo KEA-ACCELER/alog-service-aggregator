@@ -40,10 +40,12 @@ public class UserController {
 
     public ResponseEntity<String> saveTeamImg(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
-            @RequestPart(value = "teamPk") Long teamPk,
-            @RequestPart(value = "userPk") Long userPk) throws IOException {
+            @RequestPart(value = "teamPk") String t,
+            @RequestPart(value = "userPk") String u) throws IOException {
             ArrayList<MultipartFile> multipartFileList = new ArrayList<>();
             multipartFileList.add(multipartFile);
+            Long teamPk = Long.parseLong(t);
+            Long userPk = Long.parseLong(u);
         return ResponseEntity.ok(userService.uploadTeamImage(multipartFileList, teamPk, userPk));
             }
 }
