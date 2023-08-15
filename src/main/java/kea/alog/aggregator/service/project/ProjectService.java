@@ -13,5 +13,5 @@ public interface ProjectService {
 
     PageDto<ProjectMemberResponseDto> findMembers(Long projectPk, String keyword, int page, int size);
 
-    PageDto<MyProjectResponseDto> findMine(Long userPk, String keyword, ProjectSortType sortType, int page, int size);
+    PageDto<MyProjectResponseDto> findMine(Long userPk, String keyword, ProjectSortType sortType, int page, int size, Long teamPk);
 }

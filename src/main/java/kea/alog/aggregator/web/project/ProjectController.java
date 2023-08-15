@@ -78,9 +78,9 @@ public class ProjectController {
     @GetMapping("mine")
     public ResponseDto<PageDto<MyProjectResponseDto>> findMine(HttpServletRequest request, @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
-        @RequestParam("size") int size) {
+        @RequestParam("size") int size, @RequestParam(value = "teamPk", required = false) Long teamPk) {
         TokenPayloadDto userInfo = (TokenPayloadDto) request.getAttribute("user");
         Long userPk = userInfo.getUserPk();
-        return ResponseDto.success(200, projectService.findMine(userPk, keyword, sortType, page, size));
+        return ResponseDto.success(200, projectService.findMine(userPk, keyword, sortType, page, size, teamPk));
     }
 }
