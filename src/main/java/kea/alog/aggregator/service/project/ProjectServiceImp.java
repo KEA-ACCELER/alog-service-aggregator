@@ -69,8 +69,8 @@ public class ProjectServiceImp implements ProjectService {
 
     @Override
     public PageDto<MyProjectResponseDto> findMine(Long userPk, String keyword, ProjectSortType sortType,
-        int page, int size) {
-        ResponseDto<PageDto<FeignMyProjectResponseDto>> response = projectFeign.findMine(keyword, sortType, page, size);
+        int page, int size, Long teamPk) {
+        ResponseDto<PageDto<FeignMyProjectResponseDto>> response = projectFeign.findMine(keyword, sortType, page, size, teamPk);
         List<FeignMyProjectResponseDto> projects = response.getData().getContent();
 
         return PageDto.<MyProjectResponseDto>builder().content(projects.stream().map(project -> convertToMyProjectResponseDto(project, userPk)).collect(

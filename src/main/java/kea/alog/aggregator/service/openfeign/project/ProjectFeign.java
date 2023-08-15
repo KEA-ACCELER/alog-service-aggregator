@@ -32,5 +32,5 @@ public interface ProjectFeign {
     @GetMapping("api/projects/mine")
     ResponseDto<PageDto<FeignMyProjectResponseDto>> findMine(@RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("sortType") ProjectSortType sortType, @RequestParam("page") int page,
-        @RequestParam("size") int size);
+        @RequestParam("size") int size, @RequestParam(value = "teamPk", required = false) Long teamPk);
 }
