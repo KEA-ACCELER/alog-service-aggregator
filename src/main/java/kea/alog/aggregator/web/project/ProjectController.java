@@ -10,11 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
 import kea.alog.aggregator.common.dto.TokenPayloadDto;
+import kea.alog.aggregator.service.project.ProjectMemberService;
 import kea.alog.aggregator.service.project.ProjectService;
 import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.MyProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
-import kea.alog.aggregator.web.dto.ProjectMemberDto.ProjectMemberResponseDto;
+import kea.alog.aggregator.web.dto.UserDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "projects", description = "프로젝트 API")
 public class ProjectController {
     private final ProjectService projectService;
+    private final ProjectMemberService projectMemberService;
 
     @Operation(summary = "프로젝트 상세 조회")
     @ApiResponses(value = {
@@ -62,9 +64,9 @@ public class ProjectController {
         @ApiResponse(responseCode = "404", description = "존재하지 않는 projectPk", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("{projectPk}/members")
-    public ResponseDto<PageDto<ProjectMemberResponseDto>> findMembers(@PathVariable("projectPk") Long projectPk, @RequestParam(value = "keyword", required = false) String keyword,
+    public ResponseDto<PageDto<UserResponseDto>> findMembers(@PathVariable("projectPk") Long projectPk, @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam("page") int page, @RequestParam("size") int size) {
-        return ResponseDto.success(200, projectService.findMembers(projectPk, keyword, page, size));
+        return ResponseDto.success(200, projectMemberService.findAll(projectPk, keyword, page, size));
     }
 
 
