@@ -3,6 +3,7 @@ package kea.alog.aggregator.web.dto;
 import java.time.LocalDateTime;
 
 import jakarta.annotation.Nullable;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -45,5 +46,21 @@ public class IssueDto {
         private LocalDateTime startDate;
         private LocalDateTime endDate;
 
+        @Builder
+        public IssueCreateRequestDto(Long pjPk, Long teamPk, Long topicPk, Long issueAuthorPk, String issueContent,
+                String issueStatus, String issueLabel, Long issueAssigneePk, String issueId, String startDate,
+                String endDate) {
+            this.pjPk = pjPk;
+            this.teamPk = teamPk;
+            this.topicPk = topicPk;
+            this.issueAuthorPk = issueAuthorPk;
+            this.issueContent = issueContent;
+            this.issueStatus = issueStatus;
+            this.issueLabel = issueLabel;
+            this.issueAssigneePk = issueAssigneePk;
+            this.issueId = issueId;
+            this.startDate = LocalDateTime.parse(startDate);
+            this.endDate = LocalDateTime.parse(endDate);
+        }
     }
 }

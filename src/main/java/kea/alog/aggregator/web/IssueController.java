@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.service.annotation.PatchExchange;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.swagger.v3.oas.annotations.Operation;
 import kea.alog.aggregator.service.issue.IssueService;
 import kea.alog.aggregator.web.dto.IssueDto;
@@ -31,10 +34,25 @@ public class IssueController {
     @PostMapping(value = "", consumes = "multipart/form-data")
     public ResponseEntity<Long> saveIssue(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
-            @RequestPart(value = "issue") IssueDto.IssueCreateRequestDto issueRequestDto) throws IOException {
+            @RequestPart(value = "issue") String issueRequestDto) throws IOException {
             ArrayList<MultipartFile> multipartFileList = new ArrayList<>();
             multipartFileList.add(multipartFile);
-        return ResponseEntity.ok(issueService.saveIssue(multipartFileList, issueRequestDto));
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode node = objectMapper.readValue(issueRequestDto, ObjectNode.class);
+            IssueDto.IssueCreateRequestDto issueCreateRequestDto = IssueDto.IssueCreateRequestDto.builder()
+            .pjPk(node.get("pjPk").asLong())
+            .teamPk(node.get("teamPk").asLong())
+            .topicPk(node.get("topicPk").asLong())
+            .issueAuthorPk(node.get("issueAuthorPk").asLong())
+            .issueContent(node.get("issueContent").asText())
+            .issueStatus(node.get("issueStatus").asText())
+            .issueLabel(node.get("issueLabel").asText())
+            .issueAssigneePk(node.get("issueAssigneePk").asLong())
+            .issueId(node.get("issueId").asText())
+            .startDate(node.get("startDate").asText())
+            .endDate(node.get("endDate").asText())
+            .build();
+        return ResponseEntity.ok(issueService.saveIssue(multipartFileList, issueCreateRequestDto));
             }
     
     @Operation(summary = "이슈 이미지 변경", description = "이슈에 들어가는 이미지 변경")
