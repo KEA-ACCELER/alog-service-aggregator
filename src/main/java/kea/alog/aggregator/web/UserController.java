@@ -29,15 +29,14 @@ public class UserController {
     @PostMapping(value = "/profile/image", consumes = "multipart/form-data")
     public ResponseEntity<String> saveUserImg(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
-            @RequestPart(value = "userPk") Long userPk) throws IOException {
+            @RequestPart(value = "userPk") String userPk) throws IOException {
             ArrayList<MultipartFile> multipartFileList = new ArrayList<>();
             multipartFileList.add(multipartFile);
-        return ResponseEntity.ok(userService.uploadProfileImage(multipartFileList, userPk));
+        return ResponseEntity.ok(userService.uploadProfileImage(multipartFileList, Long.parseLong(userPk)));
             }
 
     @Operation(summary = "팀 프로필 이미지 저장")
     @PostMapping(value = "/teams/image", consumes = "multipart/form-data")
-
     public ResponseEntity<String> saveTeamImg(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
             @RequestPart(value = "teamPk") String t,

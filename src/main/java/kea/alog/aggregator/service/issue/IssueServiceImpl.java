@@ -28,9 +28,15 @@ public class IssueServiceImpl implements IssueService{
     public Long saveIssue(List<MultipartFile> multipartFileList, IssueCreateRequestDto issueCreateRequestDto) {
         
         List<UploadFilesResponseDto> uploadFilesResponseDtoList = fileFeign.uploadFiles(multipartFileList);
-        log.info("IssueCreateRequestDto: {}", issueCreateRequestDto.toString());
+        //log.info("IssueCreateRequestDto: {}", issueCreateRequestDto.toString());
         return issueFeign.saveIssue( issueCreateRequestDto, uploadFilesResponseDtoList.get(0).getFilePath());
 
+    }
+
+    @Override
+    public String patchImage(Long issuePk, List<MultipartFile> multipartFileList) {
+        List<UploadFilesResponseDto> uploadFilesResponseDtoList = fileFeign.uploadFiles(multipartFileList);
+        return issueFeign.changeImage(issuePk, uploadFilesResponseDtoList.get(0).getFilePath());
     }
 
     

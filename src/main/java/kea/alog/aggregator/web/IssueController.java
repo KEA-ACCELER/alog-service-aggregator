@@ -9,9 +9,12 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.service.annotation.PatchExchange;
+
 import io.swagger.v3.oas.annotations.Operation;
 import kea.alog.aggregator.service.issue.IssueService;
 import kea.alog.aggregator.web.dto.IssueDto;
@@ -33,5 +36,15 @@ public class IssueController {
             multipartFileList.add(multipartFile);
         return ResponseEntity.ok(issueService.saveIssue(multipartFileList, issueRequestDto));
             }
+    
+    @Operation(summary = "이슈 이미지 변경", description = "이슈에 들어가는 이미지 변경")
+    @PatchMapping(value = "/image", consumes = "multipart/form-data")
+    public ResponseEntity<String> changeImage(
+            @RequestPart(value = "imgs") MultipartFile multipartFile,
+            @RequestPart(value = "issuePk") String issuePk) throws IOException {
+            ArrayList<MultipartFile> multipartFileList = new ArrayList<>();
+            multipartFileList.add(multipartFile);
+        return ResponseEntity.ok(issueService.patchImage(Long.parseLong(issuePk), multipartFileList));
+    }
     
 }

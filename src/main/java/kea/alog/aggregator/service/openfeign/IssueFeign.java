@@ -1,6 +1,7 @@
 package kea.alog.aggregator.service.openfeign;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,6 +16,10 @@ public interface IssueFeign {
     
     @PostMapping(path = "/api/issue")
     public Long saveIssue(@RequestBody IssueCreateRequestDto issueCreateRequestDto, 
-                        @RequestParam String fileLink);
+                        @RequestParam("fileLink") String fileLink);
+
+    @PatchMapping("/image")
+    public String changeImage(@RequestParam("issuePk") Long issuePk,
+    @RequestParam("fileLink") String fileLink);
 
 }
