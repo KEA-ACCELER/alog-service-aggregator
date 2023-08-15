@@ -31,6 +31,9 @@ public class UserServiceImp implements UserService{
 
     public String uploadProfileImage(List<MultipartFile> multipartFileList, Long userPk){
         List<UploadFilesResponseDto> uploadFilesResponseDtoList = fileFeign.uploadFiles(multipartFileList);
+        if (uploadFilesResponseDtoList.size() == 0) {
+            return userFeign.uploadImage(userPk, "");
+        }
         //log.info("uploadFilesResponseDtoList: {}", uploadFilesResponseDtoList); 
         return userFeign.uploadImage(userPk, uploadFilesResponseDtoList.get(0).getFilePath());
     }
@@ -40,6 +43,10 @@ public class UserServiceImp implements UserService{
 
         List<UploadFilesResponseDto> uploadFilesResponseDtoList = fileFeign.uploadFiles(multipartFileList);
         //log.info("uploadFilesResponseDtoList: {}", uploadFilesResponseDtoList); 
+
+        if (uploadFilesResponseDtoList.size() == 0) {
+            return userFeign.uploadTeamImage(teamPk, userPk, "");
+        }
         return userFeign.uploadTeamImage(teamPk, userPk, uploadFilesResponseDtoList.get(0).getFilePath());
         
     }
