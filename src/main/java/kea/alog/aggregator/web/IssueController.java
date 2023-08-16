@@ -55,7 +55,7 @@ public class IssueController {
             }
     
     @Operation(summary = "이슈 이미지 변경", description = "이슈에 들어가는 이미지 변경")
-    @PatchMapping(value = "/image", consumes = "multipart/form-data")
+    @PostMapping(value = "/image", consumes = "multipart/form-data")
     public ResponseEntity<String> changeImage(
             @RequestPart(value = "imgs") MultipartFile multipartFile,
             @RequestPart(value = "issuePk") String issuePk) throws IOException {
