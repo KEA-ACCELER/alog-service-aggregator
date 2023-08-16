@@ -18,7 +18,7 @@ public interface IssueFeign {
     public Long saveIssue(@RequestBody IssueCreateRequestDto issueCreateRequestDto, 
                         @RequestParam("fileLink") String fileLink);
 
-    @PatchMapping("/image")
+    @PostMapping("/image")
     public String changeImage(@RequestParam("issuePk") Long issuePk,
     @RequestParam("fileLink") String fileLink);
 
