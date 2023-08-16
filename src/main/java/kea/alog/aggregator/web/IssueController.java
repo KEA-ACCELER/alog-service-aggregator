@@ -48,7 +48,6 @@ public class IssueController {
             .issueStatus(node.get("issueStatus").asText())
             .issueLabel(node.get("issueLabel").asText())
             .issueAssigneePk(node.get("issueAssigneePk").asLong())
-            .issueId(node.get("issueId").asText())
             .startDate(node.get("startDate").asText())
             .endDate(node.get("endDate").asText())
             .build();

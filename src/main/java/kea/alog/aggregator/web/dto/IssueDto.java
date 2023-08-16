@@ -48,7 +48,7 @@ public class IssueDto {
 
         @Builder
         public IssueCreateRequestDto(Long pjPk, Long teamPk, Long topicPk, Long issueAuthorPk, String issueContent,
-                String issueStatus, String issueLabel, Long issueAssigneePk, String issueId, String startDate,
+                String issueStatus, String issueLabel, Long issueAssigneePk,  String startDate,
                 String endDate) {
             this.pjPk = pjPk;
             this.teamPk = teamPk;
@@ -58,7 +58,7 @@ public class IssueDto {
             this.issueStatus = issueStatus;
             this.issueLabel = issueLabel;
             this.issueAssigneePk = issueAssigneePk;
-            this.issueId = issueId;
+            this.issueId = "";
             this.startDate = LocalDateTime.parse(startDate);
             this.endDate = LocalDateTime.parse(endDate);
         }
