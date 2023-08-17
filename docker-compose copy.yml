@@ -9,5 +9,6 @@ services:
       - PROJECT_SERVICE_URL
       - ISSUE_SERVICE_URL=
       - RELEASE_NOTE_SERVICE_URL=
+      - NOTIFICATION_SERVICE_URL=
     ports:
       - "8082:8082"

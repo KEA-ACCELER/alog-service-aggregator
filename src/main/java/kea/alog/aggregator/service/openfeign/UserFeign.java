@@ -23,9 +23,9 @@ public interface UserFeign {
     TeamResponseDto findTeamByPk(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk);
 
     @PostMapping(path="/api/users/image")
-    String uploadImage(@RequestParam("userPk") Long userPk, @RequestParam("image") String image );
+    String uploadImage(@RequestParam("userPk") Long userPk, @RequestParam("imgs") String imgs );
 
     @PostMapping(path="/api/users/teams/image")
-    String uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("teamImage") String image );
+    String uploadTeamImage(@RequestParam("teamPk") Long teamPk, @RequestParam("userPk") Long userPk, @RequestParam("imgs") String imgs );
 
 }

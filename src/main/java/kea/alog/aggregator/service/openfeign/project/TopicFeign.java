@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface TopicFeign {
 
-    @GetMapping("{projectPk}/topics")
+    @GetMapping("api/projects/{projectPk}/topics")
     ResponseDto<PageDto<FeignTopicResponseDto>> findAll(@PathVariable("projectPk") Long projectPk,
         @RequestParam("keyword") String keyword,
         @RequestParam("sortType") TopicSortType sortType,
         @RequestParam("page") int page, @RequestParam("size") int size);
 
-    @GetMapping("{projectPk}/topics/{topicPk}")
+    @GetMapping("api/projects/{projectPk}/topics/{topicPk}")
     ResponseDto<FeignTopicResponseDto> findByPk(@PathVariable("projectPk") Long projectPk,
         @PathVariable("topicPk") Long topicPk);
 }

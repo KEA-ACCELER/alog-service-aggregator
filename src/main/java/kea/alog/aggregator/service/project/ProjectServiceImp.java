@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import kea.alog.aggregator.common.dto.PageDto;
 import kea.alog.aggregator.common.dto.ResponseDto;
-import kea.alog.aggregator.service.mapper.ProjectMemberMapper;
-import kea.alog.aggregator.service.openfeign.project.ProjectFeign;
 import kea.alog.aggregator.service.openfeign.UserFeign;
+import kea.alog.aggregator.service.openfeign.project.ProjectFeign;
 import kea.alog.aggregator.web.constant.ProjectSortType;
 import kea.alog.aggregator.web.dto.ProjectDto.FeignMyProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.FeignProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.MyProjectResponseDto;
 import kea.alog.aggregator.web.dto.ProjectDto.ProjectResponseDto;
-import kea.alog.aggregator.web.dto.ProjectMemberDto.ProjectMemberResponseDto;
 import kea.alog.aggregator.web.dto.TeamDto.TeamResponseDto;
 import kea.alog.aggregator.web.dto.UserDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,6 @@ public class ProjectServiceImp implements ProjectService {
 
     private final UserFeign userFeign;
     private final ProjectFeign projectFeign;
-    private final ProjectMemberMapper projectMemberMapper;
 
     @Override
     public ProjectResponseDto findByPk(Long projectPk, Long userPk) {
@@ -50,27 +47,10 @@ public class ProjectServiceImp implements ProjectService {
                       .pageSize(response.getData().getPageSize())
                       .build();
     }
-
-    @Override
-    public PageDto<ProjectMemberResponseDto> findMembers(Long projectPk, String keyword, int page,
-        int size) {
-        ResponseDto<PageDto<Long>> response = projectFeign.findMembers(projectPk, keyword, page, size);
-        List<Long> userPks = response.getData().getContent();
-        List<UserResponseDto> user = userPks.stream().map(this::findUser).collect(Collectors.toList());
-
-        return PageDto.<ProjectMemberResponseDto>builder().content(user.stream().map(projectMemberMapper::toProjectMemberResponseDto).collect(
-                          Collectors.toList()))
-                      .totalPages(response.getData().getTotalPages())
-                      .totalElements(response.getData().getTotalElements())
-                      .pageNumber(response.getData().getPageNumber())
-                      .pageSize(response.getData().getPageSize())
-                      .build();
-    }
-
     @Override
     public PageDto<MyProjectResponseDto> findMine(Long userPk, String keyword, ProjectSortType sortType,
-        int page, int size) {
-        ResponseDto<PageDto<FeignMyProjectResponseDto>> response = projectFeign.findMine(keyword, sortType, page, size);
+        int page, int size, Long teamPk) {
+        ResponseDto<PageDto<FeignMyProjectResponseDto>> response = projectFeign.findMine(keyword, sortType, page, size, teamPk);
         List<FeignMyProjectResponseDto> projects = response.getData().getContent();
 
         return PageDto.<MyProjectResponseDto>builder().content(projects.stream().map(project -> convertToMyProjectResponseDto(project, userPk)).collect(
